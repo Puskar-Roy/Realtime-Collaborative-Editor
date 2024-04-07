@@ -1,0 +1,28 @@
+{
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/"
+    },
+    {
+      "src": "/register",
+      "dest": "/"
+    },
+    {
+      "src": "/user",
+      "dest": "/"
+    },
+    {
+      "src": "/forgotPassword",
+      "dest": "/"
+    },
+    {
+      "src": "/verifyPassword",
+      "dest": "/"
+    },
+    {
+      "src": "/changePassword",
+      "dest": "/"
+    }
+  ]
+}
