@@ -6,9 +6,9 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
-    <div className="min-w-screen min-h-screen  flex items-center justify-center px-5 py-5 ">
+    <div className="min-w-screen max-h-screen  flex items-center justify-center px-5 py-5 ">
       <div
-        className="bg-gray-100 text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden flex flex-col gap-2 justify-center items-center min-h-[70vh]"
+        className="bg-gray-100 text-gray-500 rounded-3xl shadow-xl mt-0 sm:mt-[70px] w-full overflow-hidden flex flex-col gap-2 justify-center items-center min-h-[70vh]"
         style={{ maxWidth: "1000px" }}
       >
         <ProfileCard
