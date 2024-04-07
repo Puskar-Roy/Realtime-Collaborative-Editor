@@ -2,6 +2,7 @@ import ProfileCard from "./ProfileCard";
 import { CgProfile } from "react-icons/cg";
 import { MdDriveFileRenameOutline, MdOutlinePassword } from "react-icons/md";
 import { IoMdLogOut } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -29,10 +30,26 @@ const Home = () => {
       </div>
       <div className="absolute bottom-0 sm:top-0 py-4 w-screen ">
         <ul className="flex justify-between items-center w-[80%] sm:w-[25%] mx-auto  flex-row">
-            <li className="text-3xl cursor-pointer"><CgProfile/></li>
-            <li className="text-3xl cursor-pointer"><MdDriveFileRenameOutline/></li>
-            <li className="text-3xl cursor-pointer"><MdOutlinePassword/></li>
-            <li className="text-3xl cursor-pointer"><IoMdLogOut/></li>
+          <li className="text-3xl cursor-pointer">
+            <Link to=''>
+              <CgProfile />
+            </Link>
+          </li>
+          <li className="text-3xl cursor-pointer">
+            <Link to=''>
+              <MdDriveFileRenameOutline />
+            </Link>
+          </li>
+          <li className="text-3xl cursor-pointer">
+            <Link to='/forgotPassword'>
+              <MdOutlinePassword />
+            </Link>
+          </li>
+          <li className="text-3xl cursor-pointer">
+            <Link to=''>
+              <IoMdLogOut />
+            </Link>
+          </li>
         </ul>
       </div>
     </div>
