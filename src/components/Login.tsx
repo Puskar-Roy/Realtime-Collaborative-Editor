@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import RegisterImage from "../assets/RegisterImage";
+import { useLogin } from "../hooks/useLogin";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { login, error, isLoading, isSucess } = useLogin();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
+    const loginData = {
+      email,
+      password,
+    };
+    await login(loginData);
   };
 
   return (
@@ -61,12 +66,23 @@ const Login = () => {
                 </div>
 
                 <button
+                  disabled={isLoading}
                   type="submit"
                   className="bg-indigo-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-indigo-600"
                 >
                   Login
                 </button>
               </div>
+              {error && (
+                <div className="bg-rose-200 text-rose-500 p-5 rounded-lg mt-4">
+                  Invalid credentials
+                </div>
+              )}
+              {isSucess && (
+                <div className="bg-green-200 text-green-500 p-5 rounded-lg mt-4">
+                  Login Done!
+                </div>
+              )}
             </form>
           </div>
         </div>
