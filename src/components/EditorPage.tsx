@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Editor from "./Editor";
 
 interface Client {
   socketId: number;
@@ -34,6 +35,7 @@ const EditorPage = () => {
       pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
     },
   ]);
+
   return (
     <div className="h-screen w-screen ">
       <div className="flex justify-center items-center gap-4">
@@ -66,8 +68,8 @@ const EditorPage = () => {
             </button>
           </div>
         </div>
-        <div className="bg-indigo-100 w-[70%] h-screen flex shadow-2xl rounded-2xl">
-          Editor
+        <div className=" w-[70%] h-screen flex shadow-2xl rounded-2xl">
+          <Editor />
         </div>
       </div>
     </div>
