@@ -6,6 +6,7 @@ import ForgotPassword from "./components/ForgotPassword";
 import VerifyPassword from "./components/VerifyPassword";
 import UploadPic from "./components/UploadPic";
 import { useAuthContext } from "./hooks/useAuthContext";
+import EditorPage from "./components/EditorPage";
 function App() {
   const { state } = useAuthContext();
   return (
@@ -35,6 +36,10 @@ function App() {
           <Route
             path="/uploadPic"
             element={state.user ? <UploadPic /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/editor"
+            element={<EditorPage/>}
           />
         </Routes>
       </BrowserRouter>

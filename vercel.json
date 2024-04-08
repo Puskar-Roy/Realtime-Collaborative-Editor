@@ -9,7 +9,7 @@
       "dest": "/"
     },
     {
-      "src": "/user",
+      "src": "/login",
       "dest": "/"
     },
     {
@@ -21,7 +21,7 @@
       "dest": "/"
     },
     {
-      "src": "/changePassword",
+      "src": "/uploadPic",
       "dest": "/"
     }
   ]
