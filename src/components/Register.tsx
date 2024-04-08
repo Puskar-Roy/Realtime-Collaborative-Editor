@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import RegisterImage from "../assets/RegisterImage";
 import { useRegister } from "../hooks/useRegister";
 import { ChangeEvent, FormEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { RegisterData } from "../interfaces";
 const Register = () => {
   const { register, error, isLoading, isSucess } = useRegister();
@@ -11,8 +10,6 @@ const Register = () => {
       email: "",
       password: "",
     });
-    const navigate = useNavigate();
-
 
     const { name, email, password } = formData;
 
@@ -27,7 +24,6 @@ const Register = () => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       await register(formData);
-      navigate('/login');
     };
   return (
     <div className="min-w-screen min-h-screen  flex items-center justify-center px-5 py-5">

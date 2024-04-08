@@ -7,3 +7,12 @@ export interface RegisterData {
   password: string;
   name: string;
 }
+
+export interface EmailInterface {
+  email: string;
+}
+export interface CheckOTPInterface {
+  newPassword: string;
+  email?: string;
+  token: string;
+}

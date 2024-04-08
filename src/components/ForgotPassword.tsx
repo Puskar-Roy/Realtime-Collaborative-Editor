@@ -1,7 +1,24 @@
-import { Link } from "react-router-dom";
+
 import RegisterImage from "../assets/RegisterImage";
+import { FormEvent, useState } from "react";
+import { useForgotPassword } from "../hooks/useForgotPassword";
+import { EmailInterface } from "../interfaces";
 
 const ForgotPassword = () => {
+  const [email, setEmail] = useState<string>("");
+  const { forgotPasswordEmail, error, isLoading, isSucess } =
+    useForgotPassword();
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const Email: EmailInterface = {
+      email,
+    };
+    try {
+      await forgotPasswordEmail(Email);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="min-w-screen min-h-screen  flex items-center justify-center px-5 py-5">
       <div
@@ -14,10 +31,12 @@ const ForgotPassword = () => {
           </div>
           <div className="w-full flex flex-col gap-[4rem] md:w-1/2 py-10 px-5 md:px-10">
             <div className="text-center mb-10">
-              <h1 className="font-bold text-3xl text-gray-900">FORGOT PASSWORD</h1>
+              <h1 className="font-bold text-3xl text-gray-900">
+                FORGOT PASSWORD
+              </h1>
               <p>Enter your registered email</p>
             </div>
-            <div>
+            <form onSubmit={handleSubmit}>
               <label htmlFor="email" className="block mb-2">
                 Email
               </label>
@@ -26,19 +45,27 @@ const ForgotPassword = () => {
                 id="email"
                 name="email"
                 className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
 
-              <div className="flex gap-1 justify-end mb-3 sm:mb-0">
-                Already have an accout?
-                <Link to="/" className="text-indigo-500">
-                  Login
-                </Link>
-              </div>
-
-              <button className="bg-indigo-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-indigo-600">
+              <button
+                disabled={isLoading}
+                className="bg-indigo-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-indigo-600"
+              >
                 Send OTP
               </button>
-            </div>
+              {error && (
+                <div className="bg-rose-200 text-rose-500 p-5 rounded-lg mt-4">
+                  OTP not send failed!
+                </div>
+              )}
+              {isSucess && (
+                <div className="bg-green-200 text-green-500 p-5 rounded-lg mt-4">
+                  OTP send successfully!
+                </div>
+              )}
+            </form>
           </div>
         </div>
       </div>

@@ -13,23 +13,24 @@ export const useLogin = () => {
     setisLoading(true);
     setError(false);
     try {
-        const response = await axios.post(
-          `${import.meta.env.VITE_API}/api/v0.1/auth/login`,
-          {
-            email,
-            password,
-          }
-        );
-        localStorage.setItem("user", JSON.stringify(response.data));
-        dispatch({ type: "LOGIN", payload: response.data });
-        setisSucess(true);
-        setisLoading(false);
+      const response = await axios.post(
+        `${import.meta.env.VITE_API}/api/v0.1/auth/login`,
+        {
+          email,
+          password,
+        }
+      );
+      localStorage.setItem("user", JSON.stringify(response.data));
+      dispatch({ type: "LOGIN", payload: response.data });
+      setisSucess(true);
+      setisLoading(false);
     } catch (error) {
-        console.error("Login error:", error);
-        setError(true);
-        setisSucess(false);
-        setisLoading(false); 
-        
+      console.error("Login error:", error);
+      setError(true);
+      setisSucess(false);
+      setTimeout(() => {
+        setisLoading(false);
+      }, 5000);
     }
   };
   return { login, error, isLoading, isSucess };
