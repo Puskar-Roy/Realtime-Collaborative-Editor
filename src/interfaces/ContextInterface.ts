@@ -9,7 +9,6 @@ export interface User {
   success?: boolean;
   token?: string;
   email?: string;
-  role?: string;
   id?: string;
 }
 
