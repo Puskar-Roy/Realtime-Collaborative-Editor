@@ -33,7 +33,7 @@ const Home = () => {
           <span className="text-indigo-500">New Room</span>
         </p>
       </div>
-      <div className="absolute bottom-0 sm:top-0 py-4 w-screen ">
+      <div className="absolute bottom-0 sm:top-0 py-4 w-screen h-[70px]">
         <ul className="flex justify-between items-center w-[80%] sm:w-[25%] mx-auto  flex-row">
           <li className="text-3xl cursor-pointer">
             <Link to="">

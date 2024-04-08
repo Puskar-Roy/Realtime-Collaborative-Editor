@@ -30,7 +30,7 @@ function App() {
           />
           <Route
             path="/verifyPassword"
-            element={state.user ? <VerifyPassword /> : <Navigate to="/" />}
+            element={state.user ? <VerifyPassword /> : <VerifyPassword />}
           />
           <Route
             path="/changePassword"
