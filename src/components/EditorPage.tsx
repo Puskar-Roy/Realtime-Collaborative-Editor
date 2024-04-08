@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 import Editor from "./Editor";
 
 interface Client {
@@ -8,33 +8,60 @@ interface Client {
 }
 
 const EditorPage = () => {
-  const [client, setClient] = useState<Client[]>([
-    {
-      socketId: 1,
-      name: "Puskar Roy",
-      pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
-    },
-    {
-      socketId: 2,
-      name: "Puskar",
-      pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
-    },
-    {
-      socketId: 3,
-      name: "Puskar",
-      pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
-    },
-    {
-      socketId: 4,
-      name: "Puskar Roy",
-      pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
-    },
-    {
-      socketId: 5,
-      name: "Puskar",
-      pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
-    },
-  ]);
+    const client: Client[] = [
+      {
+        socketId: 1,
+        name: "Puskar Roy",
+        pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
+      },
+      {
+        socketId: 2,
+        name: "Puskar",
+        pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
+      },
+      {
+        socketId: 3,
+        name: "Puskar",
+        pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
+      },
+      {
+        socketId: 4,
+        name: "Puskar Roy",
+        pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
+      },
+      {
+        socketId: 5,
+        name: "Puskar",
+        pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
+      },
+    ];
+//   const [client, setClient] = useState<Client[]>([
+//     {
+//       socketId: 1,
+//       name: "Puskar Roy",
+//       pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
+//     },
+//     {
+//       socketId: 2,
+//       name: "Puskar",
+//       pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
+//     },
+//     {
+//       socketId: 3,
+//       name: "Puskar",
+//       pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
+//     },
+//     {
+//       socketId: 4,
+//       name: "Puskar Roy",
+//       pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
+//     },
+//     {
+//       socketId: 5,
+//       name: "Puskar",
+//       pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
+//     },
+//   ]);
 
   return (
     <div className="h-screen w-screen ">
