@@ -1,6 +1,34 @@
 import { Link } from "react-router-dom";
 import RegisterImage from "../assets/RegisterImage";
+import { useRegister } from "../hooks/useRegister";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { RegisterData } from "../interfaces";
 const Register = () => {
+  const { register, error, isLoading, isSucess } = useRegister();
+    const [formData, setFormData] = useState<RegisterData>({
+      name: "",
+      email: "",
+      password: "",
+    });
+    const navigate = useNavigate();
+
+
+    const { name, email, password } = formData;
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    };
+
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      await register(formData);
+      navigate('/login');
+    };
   return (
     <div className="min-w-screen min-h-screen  flex items-center justify-center px-5 py-5">
       <div
@@ -16,15 +44,17 @@ const Register = () => {
               <h1 className="font-bold text-3xl text-gray-900">REGISTER</h1>
               <p>Enter your information to register</p>
             </div>
-            <div>
+            <form onSubmit={handleSubmit}>
               <label htmlFor="username" className="block mb-2">
                 Username
               </label>
               <input
                 type="text"
                 id="username"
-                name="username"
+                name="name"
                 className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
+                value={name}
+                onChange={handleChange}
               />
 
               <label htmlFor="email" className="block mb-2">
@@ -35,6 +65,8 @@ const Register = () => {
                 id="email"
                 name="email"
                 className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
+                value={email}
+                onChange={handleChange}
               />
 
               <label htmlFor="password" className="block mb-2">
@@ -45,6 +77,8 @@ const Register = () => {
                 id="password"
                 name="password"
                 className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
+                value={password}
+                onChange={handleChange}
               />
               <div className="flex gap-1 justify-end mb-3 sm:mb-0">
                 Already have an accout?
@@ -53,10 +87,23 @@ const Register = () => {
                 </Link>
               </div>
 
-              <button className="bg-indigo-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-indigo-600">
+              <button
+                disabled={isLoading}
+                className="bg-indigo-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-indigo-600"
+              >
                 Register
               </button>
-            </div>
+              {error && (
+                <div className="bg-rose-200 text-rose-500 p-5 rounded-lg mt-4">
+                  Invalid credentials
+                </div>
+              )}
+              {isSucess && (
+                <div className="bg-green-200 text-green-500 p-5 rounded-lg mt-4">
+                  Register Done!, A Verification link send to your Gmail.
+                </div>
+              )}
+            </form>
           </div>
         </div>
       </div>

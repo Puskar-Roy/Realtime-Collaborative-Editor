@@ -75,7 +75,7 @@ const Login = () => {
               </div>
               {error && (
                 <div className="bg-rose-200 text-rose-500 p-5 rounded-lg mt-4">
-                  Invalid credentials
+                  Invalid credentials or Email is not verified, if email not verified We will send a email into your account.
                 </div>
               )}
               {isSucess && (
