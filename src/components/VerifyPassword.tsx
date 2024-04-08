@@ -12,7 +12,7 @@ const VerifyPassword = () => {
   const [formData, setFormData] = useState<CheckOTPInterface>({
     token: "",
     newPassword: "",
-    email: state.user?.email,
+    email: "",
   });
   const { token, newPassword } = formData;
 
@@ -25,7 +25,12 @@ const VerifyPassword = () => {
   };
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await verifyOTP(formData);
+    const verifyOTPdata = {
+      token: formData.token,
+      newPassword: formData.newPassword,
+      email: state.user?.email,
+    };
+    await verifyOTP(verifyOTPdata);
   };
   return (
     <div className="min-w-screen min-h-screen  flex items-center justify-center px-5 py-5">
