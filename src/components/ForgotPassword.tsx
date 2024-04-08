@@ -3,9 +3,10 @@ import RegisterImage from "../assets/RegisterImage";
 import { FormEvent, useState } from "react";
 import { useForgotPassword } from "../hooks/useForgotPassword";
 import { EmailInterface } from "../interfaces";
-
+import { useAuthContext } from "../hooks/useAuthContext";
 const ForgotPassword = () => {
-  const [email, setEmail] = useState<string>("");
+    const { state } = useAuthContext();
+  const [email, setEmail] = useState<string | undefined>(state.user?.email);
   const { forgotPasswordEmail, error, isLoading, isSucess } =
     useForgotPassword();
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {

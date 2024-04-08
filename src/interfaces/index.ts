@@ -9,7 +9,7 @@ export interface RegisterData {
 }
 
 export interface EmailInterface {
-  email: string;
+  email: string | undefined;
 }
 export interface CheckOTPInterface {
   newPassword: string;

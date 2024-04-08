@@ -8,7 +8,6 @@ import { CheckOTPInterface } from "../interfaces";
 const VerifyPassword = () => {
   const { verifyOTP, error, isLoading, isSucess } = useVerifyOTP();
   const { state } = useAuthContext();
-  state.user?.email;
   const [formData, setFormData] = useState<CheckOTPInterface>({
     token: "",
     newPassword: "",
