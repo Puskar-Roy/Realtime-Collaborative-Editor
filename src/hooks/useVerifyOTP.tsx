@@ -21,7 +21,7 @@ export const useVerifyOTP = () => {
     setError(false);
     try {
       await axios.post(
-        `${import.meta.env.VITE_API}/api/v0.1/auth//reset-password`,
+        `${import.meta.env.VITE_API}/api/v0.1/auth/reset-password`,
         {
           email,
           newPassword,
