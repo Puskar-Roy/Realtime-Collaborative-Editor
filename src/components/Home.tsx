@@ -3,8 +3,13 @@ import { CgProfile } from "react-icons/cg";
 import { MdDriveFileRenameOutline, MdOutlinePassword } from "react-icons/md";
 import { IoMdLogOut } from "react-icons/io";
 import { Link } from "react-router-dom";
+import { useLogout } from "../hooks/useLogout";
 
 const Home = () => {
+  const { logout } = useLogout();
+  const handleClick = () => {
+    logout();
+  };
   return (
     <div className="min-w-screen max-h-screen  flex items-center justify-center px-5 py-5 ">
       <div
@@ -31,29 +36,27 @@ const Home = () => {
       <div className="absolute bottom-0 sm:top-0 py-4 w-screen ">
         <ul className="flex justify-between items-center w-[80%] sm:w-[25%] mx-auto  flex-row">
           <li className="text-3xl cursor-pointer">
-            <Link to=''>
+            <Link to="">
               <CgProfile />
             </Link>
           </li>
           <li className="text-3xl cursor-pointer">
-            <Link to=''>
+            <Link to="">
               <MdDriveFileRenameOutline />
             </Link>
           </li>
           <li className="text-3xl cursor-pointer">
-            <Link to='/forgotPassword'>
+            <Link to="/forgotPassword">
               <MdOutlinePassword />
             </Link>
           </li>
-          <li className="text-3xl cursor-pointer">
-            <Link to=''>
-              <IoMdLogOut />
-            </Link>
+          <li onClick={handleClick} className="text-3xl cursor-pointer">
+            <IoMdLogOut />
           </li>
         </ul>
       </div>
     </div>
   );
-}
+};
 
-export default Home
+export default Home;
