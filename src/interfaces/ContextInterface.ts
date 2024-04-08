@@ -10,6 +10,8 @@ export interface User {
   token?: string;
   email?: string;
   id?: string;
+  name?: string;
+  pic?: string;
 }
 
 export interface Action {

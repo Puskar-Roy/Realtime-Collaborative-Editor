@@ -37,6 +37,14 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     }
   }, []);
 
+    useEffect(() => {
+      const saveUser = () => {
+        localStorage.setItem("user", JSON.stringify(state.user));
+      };
+
+      saveUser();
+    }, [state.user]);
+
   console.log("Auth Context State : ", state);
   return (
     <AuthContext.Provider value={{ state, dispatch }}>

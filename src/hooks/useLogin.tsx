@@ -22,6 +22,7 @@ export const useLogin = () => {
       );
       localStorage.setItem("user", JSON.stringify(response.data));
       dispatch({ type: "LOGIN", payload: response.data });
+      console.log(response.data.pic);
       setisSucess(true);
       setisLoading(false);
     } catch (error) {

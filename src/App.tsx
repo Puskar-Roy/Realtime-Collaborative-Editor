@@ -4,14 +4,14 @@ import Register from "./components/Register";
 import Home from "./components/Home";
 import ForgotPassword from "./components/ForgotPassword";
 import VerifyPassword from "./components/VerifyPassword";
-import ChangePassword from "./components/ChangePassword";
+import UploadPic from "./components/UploadPic";
 import { useAuthContext } from "./hooks/useAuthContext";
 function App() {
   const { state } = useAuthContext();
   return (
     <>
       <BrowserRouter>
-        <Routes>
+        <Routes> 
           <Route
             path="/"
             element={state.user ? <Home /> : <Navigate to="/login" />}
@@ -33,8 +33,8 @@ function App() {
             element={state.user ? <VerifyPassword /> : <VerifyPassword />}
           />
           <Route
-            path="/changePassword"
-            element={state.user ? <ChangePassword /> : <Navigate to="/" />}
+            path="/uploadPic"
+            element={state.user ? <UploadPic /> : <Navigate to="/" />}
           />
         </Routes>
       </BrowserRouter>

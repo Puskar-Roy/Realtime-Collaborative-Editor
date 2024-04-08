@@ -12,7 +12,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ userName, profilePic , email 
       <div className="flex flex-col items-center">
         <img
           src={profilePic}
-          className="w-28 h-w-28 rounded-full"
+          className="w-28 h-28 rounded-full"
           alt="Profile"
         />
         <div className="mt-4 text-center">

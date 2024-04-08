@@ -4,12 +4,19 @@ import { MdDriveFileRenameOutline, MdOutlinePassword } from "react-icons/md";
 import { IoMdLogOut } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { useLogout } from "../hooks/useLogout";
+import { useAuthContext } from "../hooks/useAuthContext";
+import UploadPic from "./UploadPic";
 
 const Home = () => {
+  const { state } = useAuthContext();
+ 
   const { logout } = useLogout();
   const handleClick = () => {
     logout();
   };
+  if (!state.user?.pic) {
+    return <UploadPic />;
+  }
   return (
     <div className="min-w-screen max-h-screen  flex items-center justify-center px-5 py-5 ">
       <div
@@ -17,9 +24,9 @@ const Home = () => {
         style={{ maxWidth: "1000px" }}
       >
         <ProfileCard
-          profilePic="https://avatars.githubusercontent.com/u/113108193?s=400&u=eaf0cc5bc65ca5ae400a648859b3aa9f7800ca3d&v=4"
-          userName="Puskar Roy"
-          email="puskarroy600@gmail.com"
+          profilePic={`${state.user?.pic}`}
+          userName={`${state.user?.name}`}
+          email={`${state.user?.email}`}
         />
         <input
           className="w-full max-w-sm px-4 py-3 rounded-xl"
@@ -36,7 +43,7 @@ const Home = () => {
       <div className="absolute bottom-0 sm:top-0 py-4 w-screen h-[70px]">
         <ul className="flex justify-between items-center w-[80%] sm:w-[25%] mx-auto  flex-row">
           <li className="text-3xl cursor-pointer">
-            <Link to="">
+            <Link to="/uploadPic">
               <CgProfile />
             </Link>
           </li>
