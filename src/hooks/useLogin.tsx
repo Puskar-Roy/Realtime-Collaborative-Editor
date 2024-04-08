@@ -31,7 +31,7 @@ export const useLogin = () => {
       setisSucess(false);
       setTimeout(() => {
         setisLoading(false);
-      }, 5000);
+      }, 3000);
     }
   };
   return { login, error, isLoading, isSucess };

@@ -3,28 +3,29 @@ import RegisterImage from "../assets/RegisterImage";
 import { useRegister } from "../hooks/useRegister";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { RegisterData } from "../interfaces";
+import Loder from "./Loder";
 const Register = () => {
   const { register, error, isLoading, isSucess } = useRegister();
-    const [formData, setFormData] = useState<RegisterData>({
-      name: "",
-      email: "",
-      password: "",
+  const [formData, setFormData] = useState<RegisterData>({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const { name, email, password } = formData;
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
     });
+  };
 
-    const { name, email, password } = formData;
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target;
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    };
-
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      await register(formData);
-    };
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await register(formData);
+  };
   return (
     <div className="min-w-screen min-h-screen  flex items-center justify-center px-5 py-5">
       <div
@@ -40,66 +41,71 @@ const Register = () => {
               <h1 className="font-bold text-3xl text-gray-900">REGISTER</h1>
               <p>Enter your information to register</p>
             </div>
-            <form onSubmit={handleSubmit}>
-              <label htmlFor="username" className="block mb-2">
-                Username
-              </label>
-              <input
-                type="text"
-                id="username"
-                name="name"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
-                value={name}
-                onChange={handleChange}
-              />
+            {isLoading ? (
+              <Loder />
+            ) : (
+              <form onSubmit={handleSubmit}>
+                <label htmlFor="username" className="block mb-2">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  id="username"
+                  name="name"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
+                  value={name}
+                  onChange={handleChange}
+                />
 
-              <label htmlFor="email" className="block mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
-                value={email}
-                onChange={handleChange}
-              />
+                <label htmlFor="email" className="block mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
+                  value={email}
+                  onChange={handleChange}
+                />
 
-              <label htmlFor="password" className="block mb-2">
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
-                value={password}
-                onChange={handleChange}
-              />
-              <div className="flex gap-1 justify-end mb-3 sm:mb-0">
-                Already have an accout?
-                <Link to="/" className="text-indigo-500">
-                  Login
-                </Link>
-              </div>
-
-              <button
-                disabled={isLoading}
-                className="bg-indigo-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-indigo-600"
-              >
-                Register
-              </button>
-              {error && (
-                <div className="bg-rose-200 text-rose-500 p-5 rounded-lg mt-4">
-                  Invalid credentials
+                <label htmlFor="password" className="block mb-2">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
+                  value={password}
+                  onChange={handleChange}
+                />
+                <div className="flex gap-1 justify-end mb-3 sm:mb-0">
+                  Already have an accout?
+                  <Link to="/" className="text-indigo-500">
+                    Login
+                  </Link>
                 </div>
-              )}
-              {isSucess && (
-                <div className="bg-green-200 text-green-500 p-5 rounded-lg mt-4">
-                  Register Done!, A Verification link send to your Gmail.
-                </div>
-              )}
-            </form>
+
+                <button
+                  disabled={isLoading}
+                  className="bg-indigo-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-indigo-600"
+                >
+                  Register
+                </button>
+                {error && (
+                  <div className="bg-rose-200 text-rose-500 p-5 rounded-lg mt-4">
+                    Invalid credentials
+                  </div>
+                )}
+                {isSucess && (
+                  <div className="bg-green-200 text-green-500 p-5 rounded-lg mt-4">
+                    Register Done!, A Verification link send to your Gmail.
+                  </div>
+                )}
+              </form>
+            )}
+           
           </div>
         </div>
       </div>

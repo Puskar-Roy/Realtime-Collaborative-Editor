@@ -4,6 +4,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { useVerifyOTP } from "../hooks/useVerifyOTP";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { CheckOTPInterface } from "../interfaces";
+import Loder from "./Loder";
 
 const VerifyPassword = () => {
   const { verifyOTP, error, isLoading, isSucess } = useVerifyOTP();
@@ -46,55 +47,59 @@ const VerifyPassword = () => {
               <h1 className="font-bold text-3xl text-gray-900">VERIFY OTP</h1>
               <p>Verify your OTP and change your password</p>
             </div>
-            <form onSubmit={handleSubmit}>
-              <label htmlFor="otp" className="block mb-2">
-                OTP
-              </label>
-              <input
-                type="text"
-                id="otp"
-                name="token"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
-                value={token}
-                onChange={handleChange}
-              />
+            {isLoading ? (
+              <Loder />
+            ) : (
+              <form onSubmit={handleSubmit}>
+                <label htmlFor="otp" className="block mb-2">
+                  OTP
+                </label>
+                <input
+                  type="text"
+                  id="otp"
+                  name="token"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
+                  value={token}
+                  onChange={handleChange}
+                />
 
-              <label htmlFor="newPassword" className="block mb-2">
-                Enter New Password
-              </label>
-              <input
-                type="text"
-                id="newPassword"
-                name="newPassword"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
-                value={newPassword}
-                onChange={handleChange}
-              />
+                <label htmlFor="newPassword" className="block mb-2">
+                  Enter New Password
+                </label>
+                <input
+                  type="text"
+                  id="newPassword"
+                  name="newPassword"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
+                  value={newPassword}
+                  onChange={handleChange}
+                />
 
-              <div className="flex gap-1 justify-end mb-3 sm:mb-0">
-                Did not recive the OTP?
-                <Link to="/forgotPassword" className="text-indigo-500">
-                  Send OTP
-                </Link>
-              </div>
-
-              <button
-                disabled={isLoading}
-                className="bg-indigo-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-indigo-600"
-              >
-                Change Password
-              </button>
-              {error && (
-                <div className="bg-rose-200 text-rose-500 p-5 rounded-lg mt-4">
-                  Invalid credentials
+                <div className="flex gap-1 justify-end mb-3 sm:mb-0">
+                  Did not recive the OTP?
+                  <Link to="/forgotPassword" className="text-indigo-500">
+                    Send OTP
+                  </Link>
                 </div>
-              )}
-              {isSucess && (
-                <div className="bg-green-200 text-green-500 p-5 rounded-lg mt-4">
-                  Password Changed Successfully!
-                </div>
-              )}
-            </form>
+
+                <button
+                  disabled={isLoading}
+                  className="bg-indigo-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-indigo-600"
+                >
+                  Change Password
+                </button>
+                {error && (
+                  <div className="bg-rose-200 text-rose-500 p-5 rounded-lg mt-4">
+                    Invalid credentials
+                  </div>
+                )}
+                {isSucess && (
+                  <div className="bg-green-200 text-green-500 p-5 rounded-lg mt-4">
+                    Password Changed Successfully!
+                  </div>
+                )}
+              </form>
+            )}
           </div>
         </div>
       </div>

@@ -32,7 +32,7 @@ export const useVerifyOTP = () => {
       setisLoading(false);
       setTimeout(() => {
         navigate("/");
-      }, 5000);
+      }, 3000);
     } catch (error) {
       console.error("Password Change Error:", error);
       setError(true);

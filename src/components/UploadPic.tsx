@@ -4,10 +4,14 @@ import axios from "axios";
 import RegisterImage from "../assets/RegisterImage";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
+import Loder from "./Loder";
 const UploadPic = () => {
   const { state, dispatch } = useAuthContext();
   const navigate = useNavigate();
   const [file, setFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isSucess, setIsSucess] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -22,8 +26,11 @@ const UploadPic = () => {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    setLoading(true);
     if (!file) {
       alert("Please select a file");
+      setLoading(false);
+      setError(true);
       return;
     }
 
@@ -41,12 +48,14 @@ const UploadPic = () => {
         "user",
         JSON.stringify({ ...user, pic: response.data.pic })
       );
-      alert("Image uploaded successfully");
+      setLoading(false);
+      setIsSucess(true);
       setTimeout(() => {
         navigate("/");
-      }, 5000);
+      }, 3000);
     } catch (error) {
-      console.error("Error uploading image:", error);
+      setLoading(false);
+      setError(true);
       alert("Failed to upload image");
     }
   };
@@ -67,34 +76,49 @@ const UploadPic = () => {
                 UPLOAD YOUR PICTURE
               </h1>
             </div>
-            <form
-              onSubmit={handleSubmit}
-              className="flex justify-center items-center flex-col gap-5 "
-            >
-              <div>
-                <label
-                  htmlFor="pic"
-                  className="mb-2 flex justify-center items-center"
-                >
-                  <img
-                    className="h-[120px] cursor-pointer rounded-lg"
-                    src={imageUrl || profilePic}
-                    alt="Profile Pic"
-                  />
-                </label>
-                <input
-                  type="file"
-                  id="pic"
-                  name="file"
-                  className="hidden"
-                  onChange={handleChange}
-                />
-              </div>
 
-              <button className="bg-indigo-500 text-center text-white font-semibold px-4 py-2 rounded-md hover:bg-indigo-600">
-                Upload Picture
-              </button>
-            </form>
+            {loading ? (
+              <Loder />
+            ) : (
+              <form
+                onSubmit={handleSubmit}
+                className="flex justify-center items-center flex-col gap-5 "
+              >
+                <div>
+                  <label
+                    htmlFor="pic"
+                    className="mb-2 flex justify-center items-center"
+                  >
+                    <img
+                      className="h-[120px] cursor-pointer rounded-lg"
+                      src={imageUrl || profilePic}
+                      alt="Profile Pic"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    id="pic"
+                    name="file"
+                    className="hidden"
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <button className="bg-indigo-500 text-center text-white font-semibold px-4 py-2 rounded-md hover:bg-indigo-600">
+                  Upload Picture
+                </button>
+                {error && (
+                  <div className="bg-rose-200 text-rose-500 p-5 rounded-lg mt-4">
+                    Failed to upload image
+                  </div>
+                )}
+                {isSucess && (
+                  <div className="bg-green-200 text-green-500 p-5 rounded-lg mt-4">
+                    Successfully uploaded image!
+                  </div>
+                )}
+              </form>
+            )}
           </div>
         </div>
       </div>

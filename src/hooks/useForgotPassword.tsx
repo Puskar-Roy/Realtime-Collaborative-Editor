@@ -26,7 +26,7 @@ export const useForgotPassword = () => {
       setisLoading(false);
       setTimeout(() => {
            navigate("/verifyPassword");
-      }, 5000);
+      }, 3000);
    
     } catch (error) {
       console.error("Register error:", error);

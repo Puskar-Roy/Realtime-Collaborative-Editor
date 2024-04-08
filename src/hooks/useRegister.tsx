@@ -22,7 +22,7 @@ export const useRegister = () => {
       setisLoading(false);
       setTimeout(() => {
         navigate("/login");
-      }, 5000);
+      }, 3000);
       
     } catch (error) {
       console.error("Register error:", error);
