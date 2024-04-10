@@ -1,6 +1,9 @@
-// import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Editor from "./Editor";
-
+import { initSocket } from "../lib/socket";
+import { Socket } from "socket.io-client";
+import { useParams, useNavigate } from "react-router-dom";
+import { useAuthContext } from "../hooks/useAuthContext";
 interface Client {
   socketId: number;
   name: string;
@@ -8,62 +11,57 @@ interface Client {
 }
 
 const EditorPage = () => {
-    const client: Client[] = [
-      {
-        socketId: 1,
-        name: "Puskar Roy",
-        pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
-      },
-      {
-        socketId: 2,
-        name: "Puskar",
-        pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
-      },
-      {
-        socketId: 3,
-        name: "Puskar",
-        pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
-      },
-      {
-        socketId: 4,
-        name: "Puskar Roy",
-        pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
-      },
-      {
-        socketId: 5,
-        name: "Puskar",
-        pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
-      },
-    ];
-//   const [client, setClient] = useState<Client[]>([
-//     {
-//       socketId: 1,
-//       name: "Puskar Roy",
-//       pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
-//     },
-//     {
-//       socketId: 2,
-//       name: "Puskar",
-//       pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
-//     },
-//     {
-//       socketId: 3,
-//       name: "Puskar",
-//       pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
-//     },
-//     {
-//       socketId: 4,
-//       name: "Puskar Roy",
-//       pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
-//     },
-//     {
-//       socketId: 5,
-//       name: "Puskar",
-//       pic: "https://avatars.githubusercontent.com/u/113108193?v=4",
-//     },
-//   ]);
+  const navigate = useNavigate();
+  const { roomId } = useParams();
+  const { state } = useAuthContext();
 
+  const socketRef = useRef<Socket | null>(null);
+  useEffect(() => {
+    const handleError = (e: unknown) => {
+      console.log("Socket Error - ", e);
+      navigate("/");
+    };
+    const init = async () => {
+      socketRef.current = await initSocket();
+      socketRef.current.on("connect_error", (err) => {
+        handleError(err);
+      });
+      socketRef.current.on("connect_failed", (err) => {
+        handleError(err);
+      });
+      if (socketRef.current) {
+        socketRef.current.emit("join", {
+          roomId,
+          name: state.user?.name,
+          pic: state.user?.pic,
+        });
+        socketRef.current.on(
+          "joined",
+          ({
+            clients,
+            name,
+            // pic,
+            // socketId,
+          }: {
+            clients: Client[];
+            name: string;
+            // pic: string;
+            // socketId: string;
+          }) => {
+            if (name !== state.user?.name) {
+              console.log("Joined Room!");
+              window.alert(name)
+              
+            }
+            setClient(clients);
+          }
+        );
+      }
+    };
+    init();
+  }, [navigate, roomId, state.user?.name, state.user?.pic]);
 
+  const [client, setClient] = useState<Client[] | null>([]);
 
   return (
     <div className="h-screen w-screen ">
@@ -74,18 +72,19 @@ const EditorPage = () => {
           </div>
           <div className="mt-[100px] h-[70vh]">
             <div className="flex flex-wrap justify-center gap-3">
-              {client.map((data) => (
-                <div className="flex justify-center items-center p-3 gap-2 rounded-xl bg-indigo-100">
-                  <img
-                    className="h-10 w-10 rounded-full"
-                    src={data.pic}
-                    alt="Picture"
-                  />
-                  <div className="text-black text-base" key={data.socketId}>
-                    {data.name}
+              {client &&
+                client.map((data) => (
+                  <div key={data.socketId} className="flex justify-center items-center p-3 gap-2 rounded-xl bg-indigo-100">
+                    <img
+                      className="h-10 w-10 rounded-full"
+                      src={data.pic}
+                      alt="Picture"
+                    />
+                    <div className="text-black text-base" key={data.socketId}>
+                      {data.name}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
           <div className="flex flex-col gap-5">
