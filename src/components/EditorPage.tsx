@@ -14,7 +14,6 @@ const EditorPage = () => {
   const navigate = useNavigate();
   const { roomId } = useParams();
   const { state } = useAuthContext();
-  
 
   const socketRef = useRef<Socket | null>(null);
   useEffect(() => {
@@ -36,30 +35,38 @@ const EditorPage = () => {
           name: state.user?.name,
           pic: state.user?.pic,
         });
-        socketRef.current.on(
-          "joined",
-          ({
-            clients,
-            name,
-            // pic,
-            // socketId,
-          }: {
-            clients: Client[];
-            name: string;
-            // pic: string;
-            // socketId: string;
-          }) => {
-            if (name !== state.user?.name) {
-              console.log("Joined Room!");
-              window.alert(name)
-              
+        socketRef.current.on("joined", ({ clients }: { clients: Client[] }) => {
+          setClient(clients);
+        });
+        socketRef.current.on("userEntered", ({ name, pic }) => {
+          window.alert(`${name} entered the room`);
+          setClient((prev) => {
+            if (prev) {
+              return [...prev, { socketId: 0, name, pic }];
             }
-            setClient(clients);
+            return [{ socketId: 0, name, pic }];
+          });
+        });
+        socketRef.current.on(
+          "disconnected",
+          ({ name, socketId }: { socketId: number; name: string }) => {
+            window.alert(`${name} leave the room`);
+            setClient((prev) => {
+              if (prev) {
+                return prev.filter((client) => client.socketId !== socketId);
+              }
+              return null;
+            });
           }
         );
       }
     };
     init();
+    return () => {
+      socketRef.current?.disconnect();
+      socketRef.current?.off("join");
+      socketRef.current?.off("disconnected");
+    };
   }, [navigate, roomId, state.user?.name, state.user?.pic]);
 
   const [client, setClient] = useState<Client[] | null>([]);
@@ -70,12 +77,16 @@ const EditorPage = () => {
         <div className="bg-indigo-300 w-[20%] h-screen flex justify-between py-9 items-center flex-col shadow-2xl rounded-lg">
           <div className="text-3xl text-white font-bold">
             Collaborative-Editor
+            {state.user?.name}
           </div>
           <div className="mt-[100px] h-[70vh]">
             <div className="flex flex-wrap justify-center gap-3">
               {client &&
                 client.map((data) => (
-                  <div key={data.socketId} className="flex justify-center items-center p-3 gap-2 rounded-xl bg-indigo-100">
+                  <div
+                    key={data.socketId}
+                    className="flex justify-center items-center p-3 gap-2 rounded-xl bg-indigo-100"
+                  >
                     <img
                       className="h-10 w-10 rounded-full"
                       src={data.pic}

@@ -42,7 +42,8 @@ const Home = () => {
       }, 1500);
       return;
     }
-    navigate(`/editor/${roomId}`);
+    const nameForEditor = state.user?.name;
+    navigate(`/editor/${roomId}`, { state: { nameForEditor } });
   };
 
   return (
