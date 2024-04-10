@@ -14,6 +14,7 @@ const EditorPage = () => {
   const navigate = useNavigate();
   const { roomId } = useParams();
   const { state } = useAuthContext();
+  
 
   const socketRef = useRef<Socket | null>(null);
   useEffect(() => {
