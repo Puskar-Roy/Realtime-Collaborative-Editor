@@ -35,18 +35,23 @@ const EditorPage = () => {
           name: state.user?.name,
           pic: state.user?.pic,
         });
-        socketRef.current.on("joined", ({ clients }: { clients: Client[] }) => {
-          setClient(clients);
-        });
-        socketRef.current.on("userEntered", ({ name, pic }) => {
-          window.alert(`${name} entered the room`);
-          setClient((prev) => {
-            if (prev) {
-              return [...prev, { socketId: 0, name, pic }];
-            }
-            return [{ socketId: 0, name, pic }];
-          });
-        });
+       socketRef.current.on("joined", ({ clients }) => {
+         setClient(clients);
+         clients.forEach((dataa: { socketId: string | undefined; name: unknown; }) => {
+           if (dataa.socketId !== socketRef.current?.id) {
+             window.alert(`${dataa.name} entered the room`);
+           }
+         });
+       });
+        // socketRef.current.on("userEntered", ({ name, pic }) => {
+        //   window.alert(`${name} entered the room`);
+        //   setClient((prev) => {
+        //     if (prev) {
+        //       return [...prev, { socketId: 0, name, pic }];
+        //     }
+        //     return [{ socketId: 0, name, pic }];
+        //   });
+        // });
         socketRef.current.on(
           "disconnected",
           ({ name, socketId }: { socketId: number; name: string }) => {
