@@ -7,5 +7,5 @@ export const initSocket = async () => {
     timeout: 10000,
     transports: ["websocket"],
   };
-  return io("https://realtimecollaborativeeditorbackend.vercel.app", options);
+  return io(`${import.meta.env.VITE_API}`, options);
 };
