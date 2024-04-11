@@ -38,7 +38,7 @@ function App() {
             element={state.user ? <UploadPic /> : <Navigate to="/" />}
           />
           <Route
-            path="/editor/:roomId"
+            path="/editor/:roomId/:clientName"
             element={<EditorPage/>}
           />
         </Routes>

@@ -43,7 +43,9 @@ const Home = () => {
       return;
     }
     const nameForEditor = state.user?.name;
-    navigate(`/editor/${roomId}`, { state: { nameForEditor } });
+    navigate(`/editor/${roomId}/${nameForEditor}`, {
+      state: { nameForEditor },
+    });
   };
 
   return (

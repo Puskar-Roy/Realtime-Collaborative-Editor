@@ -12,7 +12,7 @@ interface Client {
 
 const EditorPage = () => {
   const navigate = useNavigate();
-  const { roomId } = useParams();
+  const { roomId, clientName } = useParams();
   const { state } = useAuthContext();
 
   const socketRef = useRef<Socket | null>(null);
@@ -35,23 +35,15 @@ const EditorPage = () => {
           name: state.user?.name,
           pic: state.user?.pic,
         });
-       socketRef.current.on("joined", ({ clients }) => {
-         setClient(clients);
-         clients.forEach((dataa: { socketId: string | undefined; name: unknown; }) => {
-           if (dataa.socketId !== socketRef.current?.id) {
-             window.alert(`${dataa.name} entered the room`);
-           }
-         });
-       });
-        // socketRef.current.on("userEntered", ({ name, pic }) => {
-        //   window.alert(`${name} entered the room`);
-        //   setClient((prev) => {
-        //     if (prev) {
-        //       return [...prev, { socketId: 0, name, pic }];
-        //     }
-        //     return [{ socketId: 0, name, pic }];
-        //   });
-        // });
+
+        socketRef.current.on("joined", ({ clients, name }) => {
+          if (name !== clientName) {
+            console.log("Why This Block Of Code Not working?");
+            alert(`${name} Join The Room`);
+          }
+          setClient(clients);
+        });
+
         socketRef.current.on(
           "disconnected",
           ({ name, socketId }: { socketId: number; name: string }) => {
@@ -72,7 +64,14 @@ const EditorPage = () => {
       socketRef.current?.off("join");
       socketRef.current?.off("disconnected");
     };
-  }, [navigate, roomId, state.user?.name, state.user?.pic]);
+  }, [
+    clientName,
+    navigate,
+    roomId,
+    state.user,
+    state.user?.name,
+    state.user?.pic,
+  ]);
 
   const [client, setClient] = useState<Client[] | null>([]);
 
@@ -82,7 +81,6 @@ const EditorPage = () => {
         <div className="bg-indigo-300 w-[20%] h-screen flex justify-between py-9 items-center flex-col shadow-2xl rounded-lg">
           <div className="text-3xl text-white font-bold">
             Collaborative-Editor
-            {state.user?.name}
           </div>
           <div className="mt-[100px] h-[70vh]">
             <div className="flex flex-wrap justify-center gap-3">
