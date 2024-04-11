@@ -43,7 +43,6 @@ const EditorPage = () => {
           }
           setClient(clients);
         });
-
         socketRef.current.on(
           "disconnected",
           ({ name, socketId }: { socketId: number; name: string }) => {
