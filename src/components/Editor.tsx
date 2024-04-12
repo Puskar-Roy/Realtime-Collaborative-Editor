@@ -1,8 +1,13 @@
 import { Editor } from "@monaco-editor/react";
-import { useState } from "react";
-const EditorCode = () => {
-    // const editorRef = useRef();
-  const [code, setCode] = useState<string | undefined>("");
+
+const EditorCode = ({
+  code,
+  handleCodeChange,
+}: {
+  code: string | undefined;
+  handleCodeChange: (newCode: string) => void;
+}) => {
+  console.log(code);
 
   return (
     <div className="flex justify-center items-center">
@@ -18,8 +23,10 @@ const EditorCode = () => {
         defaultValue="// some comment"
         theme="vs-purple"
         value={code}
-        onChange={(value) => {
-          setCode(value);
+        onChange={(value: string | undefined) => {
+          if (value) {
+            handleCodeChange(value); 
+          }
         }}
       />
     </div>

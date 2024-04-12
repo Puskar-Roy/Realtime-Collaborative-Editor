@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import Editor from "./Editor";
+// import Editor from "./Editor";
 import { initSocket } from "../lib/socket";
 import { Socket } from "socket.io-client";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
+
+import { Editor } from "@monaco-editor/react";
+
 interface Client {
   socketId: number;
   name: string;
@@ -11,11 +14,18 @@ interface Client {
 }
 
 const EditorPage = () => {
+  const [code, setCode] = useState<string | undefined>("");
+  const socketRef = useRef<Socket | null>(null);
+  // const handleCodeChange = (newCode: string | undefined) => {
+  //   if (newCode !== code) {
+  //     setCode(newCode);
+  //   }
+  // };
+
   const navigate = useNavigate();
   const { roomId, clientName } = useParams();
   const { state } = useAuthContext();
 
-  const socketRef = useRef<Socket | null>(null);
   useEffect(() => {
     const handleError = (e: unknown) => {
       console.log("Socket Error - ", e);
@@ -43,6 +53,18 @@ const EditorPage = () => {
           }
           setClient(clients);
         });
+
+        socketRef.current.emit("code-change", {
+          roomId,
+          code,
+        });
+
+        socketRef.current.on("code-change", ({ code }) => {
+          if (code !== null) {
+            setCode(code);
+          }
+        });
+
         socketRef.current.on(
           "disconnected",
           ({ name, socketId }: { socketId: number; name: string }) => {
@@ -71,6 +93,14 @@ const EditorPage = () => {
     state.user?.name,
     state.user?.pic,
   ]);
+
+  const handleCodeChange = (newCode: string | undefined) => {
+    if (newCode !== code) {
+      setCode(newCode);
+      // Emit the code change to the server
+      socketRef.current?.emit("code-change", { roomId, code: newCode });
+    }
+  };
 
   const [client, setClient] = useState<Client[] | null>([]);
 
@@ -111,7 +141,22 @@ const EditorPage = () => {
           </div>
         </div>
         <div className=" w-[70%] h-screen flex shadow-2xl rounded-2xl">
-          <Editor />
+          <div className="flex justify-center items-center">
+            <Editor
+              options={{
+                minimap: {
+                  enabled: false,
+                },
+              }}
+              height="95vh"
+              width="70vw"
+              defaultLanguage="javascript"
+              defaultValue="// some comment"
+              theme="vs-purple"
+              value={code}
+              onChange={handleCodeChange}
+            />
+          </div>
         </div>
       </div>
     </div>
