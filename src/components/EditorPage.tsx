@@ -39,7 +39,7 @@ const EditorPage = () => {
           pic: state.user?.pic,
         });
 
-        socketRef.current.on("joined", ({ clients, name}) => {
+        socketRef.current.on("joined", ({ clients, name }) => {
           if (name !== clientName) {
             alert(`${name} Join The Room`);
             // socketRef.current?.emit(
@@ -67,8 +67,6 @@ const EditorPage = () => {
             setCode(code);
           }
         });
-
-      
 
         socketRef.current.on(
           "disconnected",
@@ -112,7 +110,7 @@ const EditorPage = () => {
     <div className="h-screen w-screen ">
       <div className="flex justify-center flex-col items-center gap-4">
         <div className="bg-indigo-500 h-[12vh] w-screen px-10 mx-auto flex  justify-between py-9 items-center flex-row shadow-2xl">
-          <div className="text-3xl text-white font-bold">
+          <div className="text-xl sm:text-3xl text-white font-bold">
             Collaborative-Editor
           </div>
           <div className="">
@@ -144,8 +142,8 @@ const EditorPage = () => {
             </button>
           </div>
         </div>
-        <div className=" max-w-[100vw] h-[80vh] flex shadow-2xl rounded-2xl gap-4">
-          <div className="flex justify-center items-center rounded-xl">
+        <div className=" max-w-[100vw] h-[80vh] flex shadow-2xl rounded-2xl gap-4 flex-col sm:flex-row">
+          <div className="flex justify-center items-center rounded-xl ">
             <Editor
               options={{
                 minimap: {
