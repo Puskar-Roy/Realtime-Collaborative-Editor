@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   
-  
+  ![bingoctfgogreenlandingpage](https://fronty.com/static/uploads/python/html.png)
 <h3 align="center">Realtime-Collaborative-Editor
 Attendance Portal ! 📝</h3>
   <p align="center">
