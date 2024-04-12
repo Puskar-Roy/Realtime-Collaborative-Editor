@@ -12,7 +12,7 @@ Attendance Portal ! 📝</h3>
     <a href="https://github.com/Puskar-Roy/Realtime-Collaborative-Editor"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://attendancee.vercel.app">Go Live</a>
+    <a href="https://realtime-texteditor.vercel.app">Go Live</a>
     ·
     <a href="https://github.com/Puskar-Roy/Realtime-Collaborative-Editor/issues">Report Bug</a>
     ·
