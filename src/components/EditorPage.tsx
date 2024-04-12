@@ -97,7 +97,6 @@ const EditorPage = () => {
   const handleCodeChange = (newCode: string | undefined) => {
     if (newCode !== code) {
       setCode(newCode);
-      // Emit the code change to the server
       socketRef.current?.emit("code-change", { roomId, code: newCode });
     }
   };
