@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-// import Editor from "./Editor";
 import { initSocket } from "../lib/socket";
 import { Socket } from "socket.io-client";
 import { useParams, useNavigate } from "react-router-dom";
@@ -16,12 +15,6 @@ interface Client {
 const EditorPage = () => {
   const [code, setCode] = useState<string | undefined>("");
   const socketRef = useRef<Socket | null>(null);
-  // const handleCodeChange = (newCode: string | undefined) => {
-  //   if (newCode !== code) {
-  //     setCode(newCode);
-  //   }
-  // };
-
   const navigate = useNavigate();
   const { roomId, clientName } = useParams();
   const { state } = useAuthContext();
@@ -46,10 +39,20 @@ const EditorPage = () => {
           pic: state.user?.pic,
         });
 
-        socketRef.current.on("joined", ({ clients, name }) => {
+        socketRef.current.on("joined", ({ clients, name}) => {
           if (name !== clientName) {
-            console.log("Why This Block Of Code Not working?");
             alert(`${name} Join The Room`);
+            // socketRef.current?.emit(
+            //   "sync-code",
+            //   { code, socketId },
+            //   (error:unknown) => {
+            //     if (error) {
+            //       console.error("Error emitting sync-code:", error);
+            //     } else {
+            //       console.log("sync-code emitted successfully");
+            //     }
+            //   }
+            // );
           }
           setClient(clients);
         });
@@ -64,6 +67,8 @@ const EditorPage = () => {
             setCode(code);
           }
         });
+
+      
 
         socketRef.current.on(
           "disconnected",
@@ -105,32 +110,32 @@ const EditorPage = () => {
 
   return (
     <div className="h-screen w-screen ">
-      <div className="flex justify-center items-center gap-4">
-        <div className="bg-indigo-300 w-[20%] h-screen flex justify-between py-9 items-center flex-col shadow-2xl rounded-lg">
+      <div className="flex justify-center flex-col items-center gap-4">
+        <div className="bg-indigo-500 h-[12vh] w-screen px-10 mx-auto flex  justify-between py-9 items-center flex-row shadow-2xl">
           <div className="text-3xl text-white font-bold">
             Collaborative-Editor
           </div>
-          <div className="mt-[100px] h-[70vh]">
-            <div className="flex flex-wrap justify-center gap-3">
+          <div className="">
+            <div className="flex flex-wrap">
               {client &&
                 client.map((data) => (
                   <div
                     key={data.socketId}
-                    className="flex justify-center items-center p-3 gap-2 rounded-xl bg-indigo-100"
+                    className="flex justify-center items-center p-1 gap-3 ml-2 mb-2 rounded-full bg-indigo-100"
                   >
                     <img
-                      className="h-10 w-10 rounded-full"
+                      className="h-7 w-7 rounded-full"
                       src={data.pic}
                       alt="Picture"
                     />
-                    <div className="text-black text-base" key={data.socketId}>
-                      {data.name}
-                    </div>
                   </div>
                 ))}
             </div>
           </div>
-          <div className="flex flex-col gap-5">
+          <div className="flex gap-5">
+            <button className="py-2.5 px-6 h-10 rounded-lg text-sm font-medium bg-indigo-200 text-indigo-800">
+              Run Code
+            </button>
             <button className="py-2.5 px-6 rounded-lg text-sm font-medium bg-indigo-200 text-indigo-800">
               Copy Room
             </button>
@@ -139,22 +144,28 @@ const EditorPage = () => {
             </button>
           </div>
         </div>
-        <div className=" w-[70%] h-screen flex shadow-2xl rounded-2xl">
-          <div className="flex justify-center items-center">
+        <div className=" max-w-[100vw] h-[80vh] flex shadow-2xl rounded-2xl gap-4">
+          <div className="flex justify-center items-center rounded-xl">
             <Editor
               options={{
                 minimap: {
                   enabled: false,
                 },
               }}
-              height="95vh"
-              width="70vw"
+              height="80vh"
+              width="60vw"
               defaultLanguage="javascript"
-              defaultValue="// some comment"
+              defaultValue="console.log('Hello Word');"
               theme="vs-purple"
               value={code}
               onChange={handleCodeChange}
             />
+          </div>
+          <div className="w-[30vw] h-[80vh] ">
+            <div className="flex flex-col justify-between px-5 items-start gap-2">
+              <h1 className="font-bold text-2xl text-indigo-500">Output</h1>
+              <div className="h-[1px] bg-black w-[25vw]"></div>
+            </div>
           </div>
         </div>
       </div>
