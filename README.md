@@ -19,6 +19,11 @@
   </p>
 </div>
 
+##### Note: *This is the backend repository for the project. Without the backend, this project cannot start.*
+
+```bash
+  https://github.com/Puskar-Roy/Realtime-Collaborative-Editor--Backend
+```
 
 ## Getting Started 🚀
 
