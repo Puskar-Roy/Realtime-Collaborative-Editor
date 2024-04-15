@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { initSocket } from "../lib/socket";
-import { Socket } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
-
 import { Editor } from "@monaco-editor/react";
 
 interface Client {
@@ -25,7 +23,7 @@ const EditorPage = () => {
       navigate("/");
     };
     const init = async () => {
-      socketRef.current = await initSocket();
+      socketRef.current = io(`${import.meta.env.VITE_API}`);
       socketRef.current.on("connect_error", (err) => {
         handleError(err);
       });
@@ -42,24 +40,12 @@ const EditorPage = () => {
         socketRef.current.on("joined", ({ clients, name }) => {
           if (name !== clientName) {
             alert(`${name} Join The Room`);
-            // socketRef.current?.emit(
-            //   "sync-code",
-            //   { code, socketId },
-            //   (error:unknown) => {
-            //     if (error) {
-            //       console.error("Error emitting sync-code:", error);
-            //     } else {
-            //       console.log("sync-code emitted successfully");
-            //     }
-            //   }
-            // );
           }
           setClient(clients);
+          socketRef.current?.emit("send-existing-code", { roomId });
         });
-
-        socketRef.current.emit("code-change", {
-          roomId,
-          code,
+        socketRef.current.on("existing-code", ({ code }) => {
+          setCode(code);
         });
 
         socketRef.current.on("code-change", ({ code }) => {
@@ -67,14 +53,20 @@ const EditorPage = () => {
             setCode(code);
           }
         });
-
+        
         socketRef.current.on(
           "disconnected",
           ({ name, socketId }: { socketId: number; name: string }) => {
-            window.alert(`${name} leave the room`);
             setClient((prev) => {
               if (prev) {
-                return prev.filter((client) => client.socketId !== socketId);
+                const filteredClients = prev.filter(
+                  (client) => client.socketId !== socketId
+                );
+                setClient(filteredClients);
+                if (name) {
+                  window.alert(`${name} left the room`);
+                }
+                return filteredClients;
               }
               return null;
             });
@@ -97,14 +89,15 @@ const EditorPage = () => {
     state.user?.pic,
   ]);
 
+  const [client, setClient] = useState<Client[] | null>([]);
+
+
   const handleCodeChange = (newCode: string | undefined) => {
     if (newCode !== code) {
-      setCode(newCode);
+      setCode(newCode); 
       socketRef.current?.emit("code-change", { roomId, code: newCode });
     }
   };
-
-  const [client, setClient] = useState<Client[] | null>([]);
 
   return (
     <div className="h-screen w-screen ">
