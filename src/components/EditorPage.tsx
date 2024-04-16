@@ -5,30 +5,33 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { Editor } from "@monaco-editor/react";
 
 interface Client {
-  socketId: number;
+  socketId: string;
   name: string;
   pic: string;
 }
 
 const EditorPage = () => {
   const [code, setCode] = useState<string | undefined>("");
+  const [typingUsers, setTypingUsers] = useState<string[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
   const socketRef = useRef<Socket | null>(null);
   const navigate = useNavigate();
   const { roomId, clientName } = useParams();
   const { state } = useAuthContext();
+  let typingTimeout: number;
+
+  const userSocketMap: { [userId: string | number]: string } = {};
 
   useEffect(() => {
-    const handleError = (e: unknown) => {
-      console.log("Socket Error - ", e);
-      navigate("/");
-    };
     const init = async () => {
       socketRef.current = io(`${import.meta.env.VITE_API}`);
       socketRef.current.on("connect_error", (err) => {
-        handleError(err);
+        console.error("Socket Error - ", err);
+        navigate("/");
       });
       socketRef.current.on("connect_failed", (err) => {
-        handleError(err);
+        console.error("Socket Connection Failed - ", err);
+        navigate("/");
       });
       if (socketRef.current) {
         socketRef.current.emit("join", {
@@ -39,9 +42,15 @@ const EditorPage = () => {
 
         socketRef.current.on("joined", ({ clients, name }) => {
           if (name !== clientName) {
-            alert(`${name} Join The Room`);
+            alert(`${name} joined the room`);
           }
-          setClient(clients);
+          clients.forEach(
+            (client: { socketId: string | number; name: string }) => {
+              userSocketMap[String(client.socketId)] = client.name;
+            }
+          );
+
+          setClients(clients);
           socketRef.current?.emit("send-existing-code", { roomId });
         });
         socketRef.current.on("existing-code", ({ code }) => {
@@ -53,22 +62,37 @@ const EditorPage = () => {
             setCode(code);
           }
         });
-        
+
+        socketRef.current.on("typing-start", ({ userId }) => {
+          setTypingUsers((prev) => {
+            if (!prev.includes(userId)) {
+              return [...prev, userId];
+            }
+            return prev;
+          });
+        });
+
+        socketRef.current.on("typing-stop", ({ userId }) => {
+          setTypingUsers((prev) => {
+            return prev.filter((id) => id !== userId);
+          });
+        });
+
         socketRef.current.on(
           "disconnected",
-          ({ name, socketId }: { socketId: number; name: string }) => {
-            setClient((prev) => {
+          ({ name, socketId }: { socketId: string; name: string }) => {
+            setClients((prev) => {
               if (prev) {
                 const filteredClients = prev.filter(
                   (client) => client.socketId !== socketId
                 );
-                setClient(filteredClients);
+                setClients(filteredClients);
                 if (name) {
-                  window.alert(`${name} left the room`);
+                  alert(`${name} left the room`);
                 }
                 return filteredClients;
               }
-              return null;
+              return [];
             });
           }
         );
@@ -77,8 +101,6 @@ const EditorPage = () => {
     init();
     return () => {
       socketRef.current?.disconnect();
-      socketRef.current?.off("join");
-      socketRef.current?.off("disconnected");
     };
   }, [
     clientName,
@@ -89,13 +111,27 @@ const EditorPage = () => {
     state.user?.pic,
   ]);
 
-  const [client, setClient] = useState<Client[] | null>([]);
-
-
   const handleCodeChange = (newCode: string | undefined) => {
     if (newCode !== code) {
-      setCode(newCode); 
+      setCode(newCode);
       socketRef.current?.emit("code-change", { roomId, code: newCode });
+
+      clearTimeout(typingTimeout);
+      if (!typingUsers.includes(state.user?.id || "")) {
+        socketRef.current?.emit("typing-start", {
+          roomId,
+          userId: state.user?.id,
+        });
+        setTypingUsers((prev) => [...prev, state.user?.id || ""]);
+      }
+
+      typingTimeout = setTimeout(() => {
+        socketRef.current?.emit("typing-stop", {
+          roomId,
+          userId: state.user?.id,
+        });
+        setTypingUsers((prev) => prev.filter((id) => id !== state.user?.id));
+      }, 1300);
     }
   };
 
@@ -108,16 +144,17 @@ const EditorPage = () => {
           </div>
           <div className="">
             <div className="flex flex-wrap">
-              {client &&
-                client.map((data) => (
+              {clients &&
+                clients.map((data) => (
                   <div
                     key={data.socketId}
                     className="flex justify-center items-center p-1 gap-3 ml-2 mb-2 rounded-full bg-indigo-100"
                   >
                     <img
-                      className="h-7 w-7 rounded-full"
+                      className="h-7 w-7 rounded-full cursor-pointer"
                       src={data.pic}
                       alt="Picture"
+                      title={data.name}
                     />
                   </div>
                 ))}
@@ -155,6 +192,12 @@ const EditorPage = () => {
           <div className="w-[30vw] h-[80vh] ">
             <div className="flex flex-col justify-between px-5 items-start gap-2">
               <h1 className="font-bold text-2xl text-indigo-500">Output</h1>
+              {typingUsers.map((userId) => (
+                <span key={userId} className="text-xl text-black">
+                  {userId}
+                  {userSocketMap[String(userId)]} is typing...
+                </span>
+              ))}
               <div className="h-[1px] bg-black w-[25vw]"></div>
             </div>
           </div>
