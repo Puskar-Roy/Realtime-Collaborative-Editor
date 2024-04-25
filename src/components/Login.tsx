@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import RegisterImage from "../assets/RegisterImage";
 import { useLogin } from "../hooks/useLogin";
 import Loder from "./Loder";
+import GoogleAuth from "./GoogleAuth";
 
 const Login = () => {
   const { login, error, isLoading, isSucess } = useLogin();
@@ -76,6 +77,12 @@ const Login = () => {
                   >
                     Login
                   </button>
+                  <div className="oauth mt-4">
+                  <p className="text-center">Or Login with</p>
+                  <div className="flex justify-center mt-4">
+                    <GoogleAuth />
+                  </div>
+                </div>
                 </div>
                 {error && (
                   <div className="bg-rose-200 text-rose-500 p-5 rounded-lg mt-4">
