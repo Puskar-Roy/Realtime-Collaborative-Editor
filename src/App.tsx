@@ -7,16 +7,19 @@ import VerifyPassword from "./components/VerifyPassword";
 import UploadPic from "./components/UploadPic";
 import { useAuthContext } from "./hooks/useAuthContext";
 import EditorPage from "./components/EditorPage";
+import GauthUser from "./components/GauthUser";
 function App() {
   const { state } = useAuthContext();
   return (
     <>
       <BrowserRouter>
-        <Routes> 
+        <Routes>
           <Route
             path="/"
             element={state.user ? <Home /> : <Navigate to="/login" />}
           />
+          <Route path="/gauth/user/:userId" element={<GauthUser />} />
+
           <Route
             path="/login"
             element={!state.user ? <Login /> : <Navigate to="/" />}
@@ -37,10 +40,7 @@ function App() {
             path="/uploadPic"
             element={state.user ? <UploadPic /> : <Navigate to="/" />}
           />
-          <Route
-            path="/editor/:roomId/:clientName"
-            element={<EditorPage/>}
-          />
+          <Route path="/editor/:roomId/:clientName" element={<EditorPage />} />
         </Routes>
       </BrowserRouter>
     </>
