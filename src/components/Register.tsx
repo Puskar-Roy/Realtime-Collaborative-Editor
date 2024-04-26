@@ -1,9 +1,23 @@
 import { Link } from "react-router-dom";
 import RegisterImage from "../assets/RegisterImage";
 import { useRegister } from "../hooks/useRegister";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useCallback, useState } from "react";
 import { RegisterData } from "../interfaces";
 import Loder from "./Loder";
+
+import GoogleAuth from "./GoogleAuth";
+
+function DisplayOAuthOptions() {
+  return (
+    <div className="oauth mt-4">
+      <p className="text-center">Or Register with</p>
+      <div className="flex justify-center mt-4">
+        <GoogleAuth />
+      </div>
+    </div>
+  );
+}
+
 const Register = () => {
   const { register, error, isLoading, isSucess } = useRegister();
   const [formData, setFormData] = useState<RegisterData>({
@@ -22,10 +36,10 @@ const Register = () => {
     });
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback(async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await register(formData);
-  };
+  }, []);
   return (
     <div className="min-w-screen min-h-screen  flex items-center justify-center px-5 py-5">
       <div
@@ -44,68 +58,71 @@ const Register = () => {
             {isLoading ? (
               <Loder />
             ) : (
-              <form onSubmit={handleSubmit}>
-                <label htmlFor="username" className="block mb-2">
-                  Username
-                </label>
-                <input
-                  type="text"
-                  id="username"
-                  name="name"
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
-                  value={name}
-                  onChange={handleChange}
-                />
+              <>
+                <form onSubmit={handleSubmit}>
+                  <label htmlFor="username" className="block mb-2">
+                    Username
+                  </label>
+                  <input
+                    type="text"
+                    id="username"
+                    name="name"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
+                    value={name}
+                    onChange={handleChange}
+                  />
 
-                <label htmlFor="email" className="block mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
-                  value={email}
-                  onChange={handleChange}
-                />
+                  <label htmlFor="email" className="block mb-2">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
+                    value={email}
+                    onChange={handleChange}
+                  />
 
-                <label htmlFor="password" className="block mb-2">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
-                  value={password}
-                  onChange={handleChange}
-                />
-                <div className="flex gap-1 justify-end mb-3 sm:mb-0">
-                  Already have an accout?
-                  <Link to="/" className="text-indigo-500">
-                    Login
-                  </Link>
-                </div>
-
-                <button
-                  disabled={isLoading}
-                  className="bg-indigo-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-indigo-600"
-                >
-                  Register
-                </button>
-                {error && (
-                  <div className="bg-rose-200 text-rose-500 p-5 rounded-lg mt-4">
-                    Invalid credentials
+                  <label htmlFor="password" className="block mb-2">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 mb-5"
+                    value={password}
+                    onChange={handleChange}
+                  />
+                  <div className="flex gap-1 justify-end mb-3 sm:mb-0">
+                    Already have an account?
+                    <Link to="/" className="text-indigo-500">
+                      Login
+                    </Link>
                   </div>
-                )}
-                {isSucess && (
-                  <div className="bg-green-200 text-green-500 p-5 rounded-lg mt-4">
-                    Register Done!, A Verification link send to your Gmail.
-                  </div>
-                )}
-              </form>
+
+                  <button
+                    disabled={isLoading}
+                    className="bg-indigo-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-indigo-600"
+                  >
+                    Register
+                  </button>
+
+                  {error && (
+                    <div className="bg-rose-200 text-rose-500 p-5 rounded-lg mt-4">
+                      Invalid credentials
+                    </div>
+                  )}
+                  {isSucess && (
+                    <div className="bg-green-200 text-green-500 p-5 rounded-lg mt-4">
+                      Register Done!, A Verification link send to your Gmail.
+                    </div>
+                  )}
+                </form>
+                <DisplayOAuthOptions />
+              </>
             )}
-           
           </div>
         </div>
       </div>

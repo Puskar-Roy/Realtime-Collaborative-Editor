@@ -12,11 +12,11 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Routes> 
+        <Routes>
           <Route
             path="/"
             element={state.user ? <Home /> : <Navigate to="/login" />}
-          />
+          />    
           <Route
             path="/login"
             element={!state.user ? <Login /> : <Navigate to="/" />}
@@ -37,10 +37,7 @@ function App() {
             path="/uploadPic"
             element={state.user ? <UploadPic /> : <Navigate to="/" />}
           />
-          <Route
-            path="/editor/:roomId/:clientName"
-            element={<EditorPage/>}
-          />
+          <Route path="/editor/:roomId/:clientName" element={<EditorPage />} />
         </Routes>
       </BrowserRouter>
     </>
