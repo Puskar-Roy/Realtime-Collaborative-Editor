@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useCallback, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import RegisterImage from "../assets/RegisterImage";
 import { useLogin } from "../hooks/useLogin";
@@ -10,14 +10,16 @@ const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleSubmit = useCallback(async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const loginData = {
       email,
       password,
     };
     await login(loginData);
-  };
+  }, []);
 
   return (
     <div className="min-w-screen min-h-screen  flex items-center justify-center px-5 py-5">
@@ -37,7 +39,7 @@ const Login = () => {
             {isLoading ? (
               <Loder />
             ) : (
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} ref={formRef}>
                 <div>
                   <label htmlFor="email" className="block mb-2">
                     Email
@@ -78,11 +80,11 @@ const Login = () => {
                     Login
                   </button>
                   <div className="oauth mt-4">
-                  <p className="text-center">Or Login with</p>
-                  <div className="flex justify-center mt-4">
-                    <GoogleAuth />
+                    <p className="text-center">Or Login with</p>
+                    <div className="flex justify-center mt-4">
+                      <GoogleAuth />
+                    </div>
                   </div>
-                </div>
                 </div>
                 {error && (
                   <div className="bg-rose-200 text-rose-500 p-5 rounded-lg mt-4">

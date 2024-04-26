@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import RegisterImage from "../assets/RegisterImage";
 import { useRegister } from "../hooks/useRegister";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useCallback, useState } from "react";
 import { RegisterData } from "../interfaces";
 import Loder from "./Loder";
 
@@ -25,10 +25,10 @@ const Register = () => {
     });
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback(async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await register(formData);
-  };
+  }, []);
   return (
     <div className="min-w-screen min-h-screen  flex items-center justify-center px-5 py-5">
       <div
