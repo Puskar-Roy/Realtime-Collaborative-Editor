@@ -7,7 +7,7 @@ import { memo, useEffect } from "react";
   const googleAuthHandler = async () => {
     console.log("You clicked on that google button dude ");
     try {
-      window.open(`${import.meta.env.VITE_API}/auth/google`);
+      window.open(`${import.meta.env.VITE_API}/auth/google`, "_self");
     } catch (error: unknown) {
       console.log("error with the request", error);
       // @ts-ignore
