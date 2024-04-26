@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect } from "react";
+import { createContext, useReducer, useEffect, memo } from "react";
 
 import {
   State,
@@ -51,8 +51,8 @@ function getOauthToken(cookieName: string) {
   }
   return null;
 }
-
-export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
+let renderCount = 1;
+export const AuthContextProvider = memo(({ children }: AuthContextProviderProps) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
   useEffect(() => {
     const userString = localStorage.getItem("user");
@@ -67,6 +67,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       const user: User = JSON.parse(userString);
       dispatch({ type: "LOGIN", payload: user });
     }
+    console.log("AuthContextProvider Render count : ", renderCount++);
   }, []);
 
   useEffect(() => {
@@ -84,4 +85,4 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       {children}
     </AuthContext.Provider>
   );
-};
+});
