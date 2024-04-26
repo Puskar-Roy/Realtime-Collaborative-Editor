@@ -1,12 +1,12 @@
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 
-export default function GoogleAuth() {
+ function GoogleAuth() {
   useEffect(() => {
     console.log("GoogleAuth on page GG");
   }, []);
   const googleAuthHandler = async () => {
+    console.log("You clicked on that google button dude ");
     try {
-
       window.open(`${import.meta.env.VITE_API}/auth/google`);
     } catch (error: unknown) {
       console.log("error with the request", error);
@@ -67,3 +67,5 @@ export default function GoogleAuth() {
     </div>
   );
 }
+
+export default memo(GoogleAuth);
